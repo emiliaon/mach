@@ -134,7 +134,7 @@ Result http_send(Connection *conn, const char *url_str, const char *method,
   char request[4096];
   int len = snprintf(request, sizeof(request),
                      "%s %s HTTP/1.1\r\nHost: %s\r\nConnection: "
-                     "keep-alive\r\nUser-Agent: Blitz/1.0-c\r\n",
+                     "keep-alive\r\nUser-Agent: Mach/1.0\r\n",
                      method, path, host);
 
   for (int i = 0; i < header_count; i++) {
