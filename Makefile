@@ -1,4 +1,9 @@
-# Blitz-C Cross-Platform Makefile
+# Mach - Cross-Platform Makefile
+
+# Directories
+SRC_DIR = src
+ASM_DIR = $(SRC_DIR)/asm
+OBJ_DIR = obj
 
 # Platform detection
 UNAME_S := $(shell uname -s 2>/dev/null || echo Windows)
@@ -6,7 +11,7 @@ UNAME_M := $(shell uname -m 2>/dev/null || echo x86_64)
 
 # Compiler
 CC = gcc
-CFLAGS = -Wall -Wextra -O3
+CFLAGS = -Wall -Wextra -O3 -I$(SRC_DIR)
 
 # Target
 TARGET = mach
@@ -40,11 +45,14 @@ endif
 
 # Source files
 SRCS = main.c $(HTTP_SRC) attacker.c stats.c ui.c storage.c $(TERM_SRC)
-OBJS = $(SRCS:.c=.o) $(ASM_SRC:.s=.o)
+OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o) $(ASM_SRC:.s=.o))
 
 # Rules
-all: $(TARGET)
+all: $(OBJ_DIR) $(TARGET)
 	@echo "Built for $(UNAME_S) $(UNAME_M)"
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 
 $(TARGET): $(OBJS)
 	$(CC) $(OBJS) -o $(TARGET) $(LDFLAGS)
@@ -54,13 +62,13 @@ else ifeq ($(UNAME_S),Linux)
 	strip $(TARGET)
 endif
 
-%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-%.o: %.s
+$(OBJ_DIR)/%.o: $(ASM_DIR)/%.s
 	$(CC) -c $< -o $@
 
 clean:
-	rm -f *.o $(TARGET) mach.exe
+	rm -rf $(OBJ_DIR) $(TARGET) mach.exe
 
 .PHONY: all clean

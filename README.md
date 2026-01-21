@@ -29,12 +29,12 @@
 
 ### One-liner (Linux/macOS)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/HiteshGorana/mach/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/HiteshGorana/mach/main/scripts/install.sh | sh
 ```
 
 ### Windows (PowerShell)
 ```powershell
-irm https://raw.githubusercontent.com/HiteshGorana/mach/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/HiteshGorana/mach/main/scripts/install.ps1 | iex
 ```
 
 ### Manual Download
