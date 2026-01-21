@@ -27,14 +27,17 @@
 
 ## 📥 Install
 
-### One-liner (Linux/macOS)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/HiteshGorana/mach/main/scripts/install.sh | sh
-```
+# 1. Clone the repository
+git clone https://github.com/HiteshGorana/mach.git
+cd mach
 
-### Windows (PowerShell)
-```powershell
-irm https://raw.githubusercontent.com/HiteshGorana/mach/main/scripts/install.ps1 | iex
+# 2. Run the installation script
+# For macOS/Linux:
+sh scripts/install.sh
+
+# For Windows (PowerShell):
+.\scripts\install.ps1
 ```
 
 ### Manual Download
