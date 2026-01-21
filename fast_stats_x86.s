@@ -1,9 +1,18 @@
-# x86_64 SSE/AVX Assembly for Blitz-C
-# Works on Linux x86_64 and Windows x64
+# x86_64 SSE/AVX Assembly for Mach
+# Works on Linux x86_64, macOS Intel, and Windows x64
 
 .intel_syntax noprefix
 .text
 
+# Symbol naming: macOS requires underscore prefix, Linux doesn't
+# We define both to ensure compatibility
+.global _fast_sum
+.global _fast_min
+.global _fast_max
+.global _fast_parse_status
+.global _fast_duration_ms
+
+# Linux aliases (without underscore)
 .global fast_sum
 .global fast_min
 .global fast_max
@@ -15,6 +24,7 @@
 # Vectorized sum using SSE2 - processes 2 doubles per iteration
 # System V AMD64 ABI: rdi = data, esi = count
 # ============================================================
+_fast_sum:
 fast_sum:
     xorpd xmm0, xmm0            # result = 0.0
     xorpd xmm1, xmm1            # accumulator
@@ -48,6 +58,7 @@ fast_sum:
 # double fast_min(double *data, int count)
 # Find minimum using SSE2
 # ============================================================
+_fast_min:
 fast_min:
     test esi, esi
     jz .Lmin_zero_x86
@@ -92,6 +103,7 @@ fast_min:
 # double fast_max(double *data, int count)
 # Find maximum using SSE2
 # ============================================================
+_fast_max:
 fast_max:
     test esi, esi
     jz .Lmax_zero_x86
@@ -136,6 +148,7 @@ fast_max:
 # int fast_parse_status(char *response)
 # Parse HTTP status code - expects "HTTP/1.x YYY"
 # ============================================================
+_fast_parse_status:
 fast_parse_status:
     add rdi, 9                  # Skip "HTTP/1.x "
     xor eax, eax                # result = 0
@@ -161,6 +174,7 @@ fast_parse_status:
 # Convert timespec diff to milliseconds
 # System V AMD64 ABI: rdi = sec, rsi = nsec
 # ============================================================
+_fast_duration_ms:
 fast_duration_ms:
     cvtsi2sd xmm0, rdi          # sec -> double
     mov rax, 1000
