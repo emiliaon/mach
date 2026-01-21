@@ -16,7 +16,7 @@ jobs:
           - os: ubuntu-latest
             name: linux-x86_64
             asm: fast_stats_x86.s
-          - os: macos-13
+          - os: macos-15-intel
             name: macos-x86_64
             asm: fast_stats_x86.s
           - os: macos-latest
