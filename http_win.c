@@ -4,7 +4,9 @@
 #include "http.h"
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#ifdef _MSC_VER
 #pragma comment(lib, "ws2_32.lib")
+#endif
 
 static WSADATA wsaData;
 static int wsa_initialized = 0;

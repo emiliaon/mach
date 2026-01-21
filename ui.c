@@ -126,7 +126,7 @@ void ui_dashboard() {
 
     if (key == '\n' || key == '\r') {
       char full_path[512];
-      snprintf(full_path, sizeof(full_path), "%s/.blitz/history/%s",
+      snprintf(full_path, sizeof(full_path), "%s/.mach/history/%s",
                getenv("HOME"), files[cursor]);
       char *content = storage_read_file(full_path);
       if (content) {

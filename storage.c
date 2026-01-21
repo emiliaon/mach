@@ -6,7 +6,11 @@
 static void ensure_dir(const char *path) {
   struct stat st = {0};
   if (stat(path, &st) == -1) {
+#ifdef _WIN32
+    mkdir(path);
+#else
     mkdir(path, 0755);
+#endif
   }
 }
 
@@ -35,7 +39,7 @@ void save_run(const char *url, int requests, int success, int failed,
     return;
 
   fprintf(f, "{\n");
-  fprintf(f, "  \"timestamp\": \"%ld\",\n", now);
+  fprintf(f, "  \"timestamp\": \"%lld\",\n", (long long)now);
   fprintf(f, "  \"url\": \"%s\",\n", url);
   fprintf(f, "  \"total_requests\": %d,\n", requests);
   fprintf(f, "  \"successful\": %d,\n", success);
@@ -83,7 +87,7 @@ int storage_load_urls(const char *filename, char **urls, int max_urls) {
 
 int storage_list_history(char **files, int max_files) {
   char path[512];
-  snprintf(path, sizeof(path), "%s/.blitz/history", getenv("HOME"));
+  snprintf(path, sizeof(path), "%s/.mach/history", getenv("HOME"));
   DIR *d = opendir(path);
   if (!d)
     return 0;
@@ -100,7 +104,7 @@ int storage_list_history(char **files, int max_files) {
 
 void storage_clear_history() {
   char path[512];
-  snprintf(path, sizeof(path), "%s/.blitz/history", getenv("HOME"));
+  snprintf(path, sizeof(path), "%s/.mach/history", getenv("HOME"));
   DIR *d = opendir(path);
   if (!d)
     return;
