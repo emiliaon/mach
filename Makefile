@@ -44,7 +44,8 @@ else
 endif
 
 # Source files
-SRCS = $(wildcard src/*.c)
+CORE_SRCS = main.c attacker.c stats.c ui.c storage.c updater.c
+SRCS = $(addprefix src/, $(CORE_SRCS) $(HTTP_SRC) $(TERM_SRC))
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS)) $(OBJ_DIR)/$(ASM_SRC:.s=.o)
 
 # Rules
