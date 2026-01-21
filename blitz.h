@@ -10,9 +10,10 @@
 #else
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <pthread.h>
 #include <unistd.h>
 #endif
+
+#include <pthread.h>
 
 #include <openssl/err.h>
 #include <openssl/ssl.h>
