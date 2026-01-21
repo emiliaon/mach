@@ -55,6 +55,11 @@ typedef struct {
   char *output_file;
   int quiet;
   int no_color;
+  char *tag;
+  int before;
+  int after;
+  int show_result;
+  double threshold;
 } Options;
 
 typedef struct {

@@ -20,6 +20,8 @@ void storage_init() {
   ensure_dir(path);
   snprintf(path, sizeof(path), "%s/.mach/history", getenv("HOME"));
   ensure_dir(path);
+  snprintf(path, sizeof(path), "%s/.mach/tags", getenv("HOME"));
+  ensure_dir(path);
 }
 
 void save_run(const char *url, int requests, int success, int failed,
@@ -117,4 +119,65 @@ void storage_clear_history() {
     }
   }
   closedir(d);
+}
+
+void storage_save_tagged(const char *tag, const char *type, Stats stats) {
+  char path[512];
+  snprintf(path, sizeof(path), "%s/.mach/tags/%s", getenv("HOME"), tag);
+  ensure_dir(path);
+
+  char filename[512];
+  snprintf(filename, sizeof(filename), "%s/%s.json", path, type);
+
+  FILE *f = fopen(filename, "w");
+  if (!f)
+    return;
+
+  fprintf(f, "{\n");
+  fprintf(f, "  \"total_requests\": %d,\n", stats.total_requests);
+  fprintf(f, "  \"success\": %d,\n", stats.success);
+  fprintf(f, "  \"failed\": %d,\n", stats.failed);
+  fprintf(f, "  \"avg_latency\": %.4f,\n", stats.avg_latency);
+  fprintf(f, "  \"min_latency\": %.4f,\n", stats.min_latency);
+  fprintf(f, "  \"max_latency\": %.4f,\n", stats.max_latency);
+  fprintf(f, "  \"p50_latency\": %.4f,\n", stats.p50_latency);
+  fprintf(f, "  \"p95_latency\": %.4f,\n", stats.p95_latency);
+  fprintf(f, "  \"p99_latency\": %.4f,\n", stats.p99_latency);
+  fprintf(f, "  \"rps\": %.4f,\n", stats.rps);
+  fprintf(f, "  \"total_duration_s\": %.4f\n", stats.total_duration_s);
+  fprintf(f, "}\n");
+
+  fclose(f);
+}
+
+int storage_load_tagged(const char *tag, const char *type, Stats *stats) {
+  char filename[512];
+  snprintf(filename, sizeof(filename), "%s/.mach/tags/%s/%s.json",
+           getenv("HOME"), tag, type);
+
+  char *data = storage_read_file(filename);
+  if (!data)
+    return 0;
+
+  sscanf(data,
+         "{\n"
+         "  \"total_requests\": %d,\n"
+         "  \"success\": %d,\n"
+         "  \"failed\": %d,\n"
+         "  \"avg_latency\": %lf,\n"
+         "  \"min_latency\": %lf,\n"
+         "  \"max_latency\": %lf,\n"
+         "  \"p50_latency\": %lf,\n"
+         "  \"p95_latency\": %lf,\n"
+         "  \"p99_latency\": %lf,\n"
+         "  \"rps\": %lf,\n"
+         "  \"total_duration_s\": %lf\n"
+         "}",
+         &stats->total_requests, &stats->success, &stats->failed,
+         &stats->avg_latency, &stats->min_latency, &stats->max_latency,
+         &stats->p50_latency, &stats->p95_latency, &stats->p99_latency,
+         &stats->rps, &stats->total_duration_s);
+
+  free(data);
+  return 1;
 }

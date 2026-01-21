@@ -4,6 +4,9 @@
 #include "ui.h"
 #include <unistd.h>
 
+#define COLOR_RESET "\x1b[0m"
+#define COLOR_RED "\x1b[31m"
+
 static void *worker_thread(void *arg) {
   WorkerContext *ctx = (WorkerContext *)arg;
   Options *opts = ctx->opts;
@@ -145,8 +148,33 @@ void attacker_run(Options *opts) {
 
   Stats s = calculate_stats(results, results_count, total_duration);
   ui_display_summary(s);
+
   save_run(opts->urls[0], s.total_requests, s.success, s.failed, s.avg_latency,
            s.rps);
+
+  if (opts->tag) {
+    if (opts->before) {
+      storage_save_tagged(opts->tag, "before", s);
+      ui_success("   [TAGGED as before]\n");
+    } else if (opts->after) {
+      storage_save_tagged(opts->tag, "after", s);
+      ui_success("   [TAGGED as after]\n");
+
+      // Automated Threshold Check
+      if (opts->threshold > 0) {
+        Stats before;
+        if (storage_load_tagged(opts->tag, "before", &before)) {
+          double diff = s.avg_latency - before.avg_latency;
+          double pct = (diff / before.avg_latency) * 100.0;
+          if (pct > opts->threshold) {
+            printf("\n%s❌ REGRESSION DETECTED: %.1f%% (Threshold: %.1f%%)%s\n",
+                   COLOR_RED, pct, opts->threshold, COLOR_RESET);
+            exit(1);
+          }
+        }
+      }
+    }
+  }
 
   pthread_mutex_destroy(&mutex);
   free(threads);

@@ -22,6 +22,11 @@ void print_usage() {
   printf("  -r INT      Requests per second limit\n");
   printf("  -p STR      Test profile (smoke, stress, soak)\n");
   printf("  -m STR      HTTP method (default GET)\n");
+  printf("  --tag STR   Tag name for comparison\n");
+  printf("  --before    Set as baseline for tag\n");
+  printf("  --after     Set as target for tag comparison\n");
+  printf("  --result    Show comparison result for tag\n");
+  printf("  --threshold FLOAT Max allowed regression %% (default 0)\n");
 }
 
 static int parse_duration(const char *dur) {
@@ -105,6 +110,11 @@ int main(int argc, char *argv[]) {
       {"ramp-up", required_argument, 0, 1003},
       {"timeout", required_argument, 0, 't'},
       {"insecure", no_argument, 0, 'k'},
+      {"tag", required_argument, 0, 1004},
+      {"before", no_argument, 0, 1005},
+      {"after", no_argument, 0, 1006},
+      {"result", no_argument, 0, 1007},
+      {"threshold", required_argument, 0, 1008},
       {"version", no_argument, 0, 'v'},
       {"help", no_argument, 0, '?'},
       {0, 0, 0, 0}};
@@ -160,12 +170,37 @@ int main(int argc, char *argv[]) {
     case 'k':
       opts.insecure = 1;
       break;
+    case 1004:
+      opts.tag = strdup(optarg);
+      break;
+    case 1005:
+      opts.before = 1;
+      break;
+    case 1006:
+      opts.after = 1;
+      break;
+    case 1007:
+      opts.show_result = 1;
+      break;
+    case 1008:
+      opts.threshold = atof(optarg);
+      break;
     case 'v':
       printf("Mach v%s\n", VERSION);
       return 0;
     case '?':
       print_usage();
       return 0;
+    }
+  }
+
+  if (opts.show_result) {
+    if (opts.tag) {
+      ui_display_comparison(opts.tag);
+      return 0;
+    } else {
+      ui_error("Error: --result requires --tag <name>\n");
+      return 1;
     }
   }
 

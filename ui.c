@@ -160,3 +160,59 @@ void ui_examples() {
   printf("     ./mach -m POST -h \"Content-Type:application/json\" -b "
          "'{\"id\":1}' http://api.com\n");
 }
+
+static void print_comp_row(const char *label, double before, double after,
+                           int lower_is_better) {
+  double diff = after - before;
+  double pct = before != 0 ? (diff / before) * 100.0 : 0;
+  int improved = lower_is_better ? (after < before) : (after > before);
+
+  printf("  %-15s %-12.2f %-12.2f ", label, before, after);
+
+  if (diff == 0) {
+    printf("%s━ 0.0%%%s\n", COLOR_RESET, COLOR_RESET);
+  } else {
+    const char *color = improved ? COLOR_GREEN : COLOR_RED;
+    const char *icon = (after > before) ? "▲" : "▼";
+    printf("%s%s %+.1f%%%s\n", color, icon, pct, COLOR_RESET);
+  }
+}
+
+void ui_display_comparison(const char *tag) {
+  Stats before, after;
+  int has_before = storage_load_tagged(tag, "before", &before);
+  int has_after = storage_load_tagged(tag, "after", &after);
+
+  if (!has_before) {
+    ui_error("Error: Baseline ('before') not found for tag: ");
+    printf("%s\n", tag);
+    return;
+  }
+  if (!has_after) {
+    ui_error("Error: Target ('after') not found for tag: ");
+    printf("%s\n", tag);
+    return;
+  }
+
+  printf("\n%s⚖️  COMPARISON: %s%s\n", COLOR_BOLD COLOR_BRIGHT_MAGENTA, tag,
+         COLOR_RESET);
+  printf("%s──────────────────────────────────────────────────────────%s\n",
+         COLOR_DIM, COLOR_RESET);
+  printf("  %-15s %-12s %-12s %-10s\n", "Metric", "Before", "After", "Delta");
+  printf("%s──────────────────────────────────────────────────────────%s\n",
+         COLOR_DIM, COLOR_RESET);
+
+  print_comp_row("Avg Latency", before.avg_latency, after.avg_latency, 1);
+  print_comp_row("P50 Latency", before.p50_latency, after.p50_latency, 1);
+  print_comp_row("P95 Latency", before.p95_latency, after.p95_latency, 1);
+  print_comp_row("P99 Latency", before.p99_latency, after.p99_latency, 1);
+  print_comp_row("RPS", before.rps, after.rps, 0);
+
+  double b_succ = (double)before.success / before.total_requests * 100;
+  double a_succ = (double)after.success / after.total_requests * 100;
+  print_comp_row("Success Rate", b_succ, a_succ, 0);
+
+  printf("%s──────────────────────────────────────────────────────────%s\n",
+         COLOR_DIM, COLOR_RESET);
+  printf("\n");
+}

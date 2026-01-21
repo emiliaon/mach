@@ -11,5 +11,6 @@ void ui_progress_bar(int current, int total, double elapsed_s);
 void ui_display_summary(Stats s);
 void ui_dashboard();
 void ui_examples();
+void ui_display_comparison(const char *tag);
 
 #endif
